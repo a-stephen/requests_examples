@@ -1,12 +1,11 @@
-from genericpath import exists
+# from genericpath import exists
 import os
-import sys
 import re
 import requests
-
+from datetime import datetime
 # make a request using get
 
-r = requests.get("https://www.w3schools.com")
+# r = requests.get("https://www.w3schools.com")
 
 # print(r.url) # return the passed url
 # print("==============")
@@ -25,16 +24,36 @@ r = requests.get("https://www.w3schools.com")
 # print(r.raw) # returns an HTTPResponse object
 # print("==============")
 
-def write_rcontent(httpObject):
+def write_rcontent(website):
 
     """
         Returns a .txt file populated with the content of the httpObject.
+
     """
-    if 'content.txt' not in os.listdir():
-        with open('content.txt', 'a') as content:
-            content.write(httpObject.text)
-    else: print("the file already exists")
+    # make a get request
+    get_date = datetime.today()
+    get_info = requests.get(website)
+
+    curr_dir = os.getcwd()
+    data_dir = os.path.join(curr_dir, 'news_data')
+
+    # make a directory
+    if not os.path.exists(data_dir):
+        os.mkdir(data_dir)
+    else:
+        os.chdir(data_dir)
+        with open("{}_data.txt".format(get_date.date()), 'a') as file:
+            file.write(get_info.text)
     return
+    # return os.getcwd()
+
+def extract():
+    """
+        
+    """
+    pass
+
+n_data = write_rcontent("https://mg.co.za/section/news/")
 
 def extract_tags(tag, httpObject):
     """
@@ -47,11 +66,21 @@ def extract_tags(tag, httpObject):
     
     return len(re.findall(tag, httpObject.text)) + 1
 
-ab = write_rcontent(r)
+# ab = write_rcontent(r)
 
-# does not work quiet well yet, can be fixed....
-ra = extract_tags("html", r)
+# # does not work quiet well yet, can be fixed....
+# ra = extract_tags("html", r)
 
-print(ra)
+# print(ra)
 
 # print(type(r.text))
+
+def get_data(site):
+    # make a get request to the site
+
+    get_request = requests.get(site)
+
+    return get_request.text
+
+# data = get_data(site = "https://mg.co.za/section/news/")
+# print(data)
