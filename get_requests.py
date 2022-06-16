@@ -42,35 +42,43 @@ def write_rcontent(website):
 
     # make a directory
     if not os.path.exists(data_dir):
-        os.mkdir(data_dir)
+        os.chdir(os.mkdir(data_dir))
     else:
         os.chdir(data_dir)
         with open("{}_data.txt".format(get_date.date()), 'a') as file:
             file.write(get_info.text)
     return
     # return os.getcwd()
+def reduce_hrefs(href):
+    return re.findall("(?<=https://)(.*)(?=/)", href)
 
 def extract():
     """
         Return 
     """
-    html_r = requests.get("https://businesstech.co.za/news/")
+    html_r = requests.get("https://citinewsroom.com/")
 
     bs_soup = bs(html_r.text, 'html.parser')
     a_hrefs = []
-    body = bs_soup.find('main')
-    print(len(body))
+    # socios = [facebook]
+    body = bs_soup.find('body')
+    # print(len(body))
     for link in body.find_all('a'):
-        href = link.get('href');
-        a_hrefs.append(href)
+        hrefs = link.get('href');
+        # print(hrefs)
+        r_match = reduce_hrefs(str(hrefs))
+        if len(r_match): 
+            a_hrefs.append(r_match[0])
     return a_hrefs
     
 
 # n_data = write_rcontent("https://mg.co.za/section/news/")
 
-data = extract()
+list_link = extract()
 
-print(data)
+# data = reduce_hrefs(list_link)
+
+print(list_link)
 
 def extract_tags(tag, httpObject):
     """
