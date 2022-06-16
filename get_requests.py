@@ -3,6 +3,9 @@ import os
 import re
 import requests
 from datetime import datetime
+from bs4 import BeautifulSoup as bs
+
+
 # make a request using get
 
 # r = requests.get("https://www.w3schools.com")
@@ -49,11 +52,25 @@ def write_rcontent(website):
 
 def extract():
     """
-        
+        Return 
     """
-    pass
+    html_r = requests.get("https://businesstech.co.za/news/")
 
-n_data = write_rcontent("https://mg.co.za/section/news/")
+    bs_soup = bs(html_r.text, 'html.parser')
+    a_hrefs = []
+    body = bs_soup.find('main')
+    print(len(body))
+    for link in body.find_all('a'):
+        href = link.get('href');
+        a_hrefs.append(href)
+    return a_hrefs
+    
+
+# n_data = write_rcontent("https://mg.co.za/section/news/")
+
+data = extract()
+
+print(data)
 
 def extract_tags(tag, httpObject):
     """
