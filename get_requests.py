@@ -47,10 +47,21 @@ def write_rcontent(website):
         os.chdir(data_dir)
         with open("{}_data.txt".format(get_date.date()), 'a') as file:
             file.write(get_info.text)
-    return
+    return file
     # return os.getcwd()
 def reduce_hrefs(href):
-    return re.findall("(?<=https://)(.*)(?=/)", href)
+    hrefs2search = []
+    un_href = ['facebook.com', 'instagram.com', 'twitter.com', 'soundcloud.com', 'pinterest.com', 'youtube.com', 'contact', 'aboutus']
+    for _href in un_href:
+        f_href = re.findall(_href, href)
+        if f_href:
+            hrefs2search.append(href)
+    return hrefs2search
+    
+    # return re.findall("(?<=https://)(.*)(?=/)", href)
+
+def company_mentioned(name):
+    pass
 
 def extract():
     """
@@ -65,11 +76,11 @@ def extract():
     # print(len(body))
     for link in body.find_all('a'):
         hrefs = link.get('href');
-        # print(hrefs)
+        # print(type(hrefs))
         r_match = reduce_hrefs(str(hrefs))
-        if len(r_match): 
+        if len(r_match):
             a_hrefs.append(r_match[0])
-    return a_hrefs
+    return len(a_hrefs)
     
 
 # n_data = write_rcontent("https://mg.co.za/section/news/")
