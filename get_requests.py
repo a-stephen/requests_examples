@@ -49,7 +49,7 @@ def write_rcontent(website):
             file.write(get_info.text)
     return file
     # return os.getcwd()
-def reduce_hrefs(href):
+def fliter_hrefs(href):
     hrefs2search = []
     un_href = ['facebook.com', 'instagram.com', 'twitter.com', 'soundcloud.com', 'pinterest.com', 'youtube.com', 'contact', 'aboutus']
     for _href in un_href:
