@@ -54,11 +54,14 @@ def filter_hrefs(href):
     un_href = ['facebook.com', 'instagram.com', 'twitter.com', 'soundcloud.com', 'pinterest.com', 'youtube.com', 'contact', 'aboutus']
     for _href in un_href:
         f_href = re.findall(_href, href)
+        # if len(f_href) == 0: print(href)
         if f_href:
             hrefs2search.append(href)
     return hrefs2search
     
     # return re.findall("(?<=https://)(.*)(?=/)", href)
+
+
 
 def company_mentioned(name):
     pass
@@ -80,7 +83,7 @@ def extract():
         r_match = filter_hrefs(str(hrefs))
         if len(r_match):
             a_hrefs.append(r_match[0])
-    return len(a_hrefs)
+    return set(a_hrefs)
     
 
 # n_data = write_rcontent("https://mg.co.za/section/news/")
@@ -90,33 +93,3 @@ list_link = extract()
 # data = reduce_hrefs(list_link)
 
 print(list_link)
-
-def extract_tags(tag, httpObject):
-    """
-        return the number of tag in the http response
-
-            tag: string (exple: a, link, p, br)
-
-            if return odd number the tag has only an open-tag else the tag has both the open-tag and close-tag
-    """
-    
-    return len(re.findall(tag, httpObject.text)) + 1
-
-# ab = write_rcontent(r)
-
-# # does not work quiet well yet, can be fixed....
-# ra = extract_tags("html", r)
-
-# print(ra)
-
-# print(type(r.text))
-
-def get_data(site):
-    # make a get request to the site
-
-    get_request = requests.get(site)
-
-    return get_request.text
-
-# data = get_data(site = "https://mg.co.za/section/news/")
-# print(data)
