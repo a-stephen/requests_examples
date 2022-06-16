@@ -49,7 +49,7 @@ def write_rcontent(website):
             file.write(get_info.text)
     return file
     # return os.getcwd()
-def fliter_hrefs(href):
+def filter_hrefs(href):
     hrefs2search = []
     un_href = ['facebook.com', 'instagram.com', 'twitter.com', 'soundcloud.com', 'pinterest.com', 'youtube.com', 'contact', 'aboutus']
     for _href in un_href:
@@ -77,7 +77,7 @@ def extract():
     for link in body.find_all('a'):
         hrefs = link.get('href');
         # print(type(hrefs))
-        r_match = reduce_hrefs(str(hrefs))
+        r_match = filter_hrefs(str(hrefs))
         if len(r_match):
             a_hrefs.append(r_match[0])
     return len(a_hrefs)
