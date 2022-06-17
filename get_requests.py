@@ -2,8 +2,8 @@
 import os
 import re
 import requests
-from datetime import datetime
 from bs4 import BeautifulSoup as bs
+from datetime import datetime, time
 
 
 # make a request using get
@@ -49,15 +49,18 @@ def write_rcontent(website):
             file.write(get_info.text)
     return file
     # return os.getcwd()
+
+
 def filter_hrefs(href):
-    hrefs2search = []
-    un_href = ['facebook.com', 'instagram.com', 'twitter.com', 'soundcloud.com', 'pinterest.com', 'youtube.com', 'contact', 'aboutus']
-    for _href in un_href:
-        f_href = re.findall(_href, href)
-        # if len(f_href) == 0: print(href)
-        if f_href:
-            hrefs2search.append(href)
-    return hrefs2search
+    un_hrefs = []
+    un_list = [ 'facebook.com', 'instagram.com', 'twitter.com', 'subscribe', 'author', 'section', 'story-tip-offs', 'linkedin.com',
+                'terms-of-services', 'login', 'cookie-policy', 'ethics-and-social-media-policy', 'webinars', 'jobs', 'careers',
+                'soundcloud.com', 'pinterest.com', 'advertise', 'youtube.com', 'contact-us', 'about-us', 'privacy-policy']
+    for _href in un_list:
+        if re.findall(_href, href): 
+            un_hrefs.append(href)
+        else: pass
+    return un_hrefs
     
     # return re.findall("(?<=https://)(.*)(?=/)", href)
 
@@ -70,20 +73,25 @@ def extract():
     """
         Return 
     """
-    html_r = requests.get("https://citinewsroom.com/")
+    html_r = requests.get("https://mg.co.za/section/news/")
 
     bs_soup = bs(html_r.text, 'html.parser')
     a_hrefs = []
+    un_href = set()
     # socios = [facebook]
     body = bs_soup.find('body')
     # print(len(body))
     for link in body.find_all('a'):
         hrefs = link.get('href');
-        # print(type(hrefs))
         r_match = filter_hrefs(str(hrefs))
+        a_hrefs.append(hrefs)
         if len(r_match):
-            a_hrefs.append(r_match[0])
-    return set(a_hrefs)
+            un_href.add(r_match[0])
+    return set(a_hrefs).difference(un_href)
+    #     if str(hrefs).startswith('https'): a_hrefs.add(hrefs)
+    #     social_links = filter_hrefs(str(hrefs))
+    # print(social_links)
+    # return a_hrefs.difference(set(social_links))
     
 
 # n_data = write_rcontent("https://mg.co.za/section/news/")
